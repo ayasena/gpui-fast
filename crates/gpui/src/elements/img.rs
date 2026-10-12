@@ -125,9 +125,12 @@ where
     }
 }
 
+pub use super::image_dither::ImageDither;
+
 /// The style of an image element.
 pub struct ImageStyle {
     grayscale: bool,
+    dither: Option<ImageDither>,
     object_fit: ObjectFit,
     loading: Option<Box<dyn Fn() -> AnyElement>>,
     fallback: Option<Box<dyn Fn() -> AnyElement>>,
@@ -137,6 +140,7 @@ impl Default for ImageStyle {
     fn default() -> Self {
         Self {
             grayscale: false,
+            dither: None,
             object_fit: ObjectFit::Contain,
             loading: None,
             fallback: None,
@@ -152,6 +156,12 @@ pub trait StyledImage: Sized {
     /// Set the image to be displayed in grayscale.
     fn grayscale(mut self, grayscale: bool) -> Self {
         self.image_style().grayscale = grayscale;
+        self
+    }
+
+    /// Apply ordered dithering in the GPU image fragment shader.
+    fn dither(mut self, dither: ImageDither) -> Self {
+        self.image_style().dither = Some(dither);
         self
     }
 
@@ -493,13 +503,14 @@ impl Element for Img {
                         .get_bounds(bounds, data.size(layout_state.frame_index));
                     let corner_radii = style.corner_radii.to_pixels(window.rem_size());
                     window
-                        .paint_image(
+                        .paint_image_with_dither(
                             bounds,
                             new_bounds,
                             corner_radii,
                             data,
                             layout_state.frame_index,
                             self.style.grayscale,
+                            self.style.dither,
                         )
                         .log_err();
                 } else if let Some(replacement) = &mut layout_state.replacement {

@@ -47,7 +47,7 @@ upstream = ["dep:gpui_pre", "dep:gpui_pre_platform", "gpui_fast?/windows-manifes
 [dependencies]
 # Named `gpui_fast` and `gpui_platform_fast` so that either GPUI can be named
 # `gpui` by the crate roots; see `src/main.rs`.
-gpui_fast = { package = "gpui", path = "../gpui", default-features = false, features = ["test-support"], optional = true }
+gpui_fast = { package = "gpui-fast", path = "../gpui", default-features = false, features = ["test-support"], optional = true }
 gpui_platform_fast = { package = "gpui_platform", path = "../gpui_platform", default-features = false, features = ["font-kit", "wayland", "x11"], optional = true }
 gpui_wgpu = { workspace = true, optional = true }
 gpui_pre = { package = "gpui-pre", version = "=0.3.7", optional = true }

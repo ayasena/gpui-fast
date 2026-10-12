@@ -5002,6 +5002,7 @@ impl Window {
             let opacity = self.element_opacity();
 
             self.next_frame.scene.insert_primitive(PolychromeSprite {
+                dither: [0.0; 4],
                 order: 0,
                 pad: 0,
                 grayscale: false.into(),
@@ -5097,6 +5098,28 @@ impl Window {
         frame_index: usize,
         grayscale: bool,
     ) -> Result<()> {
+        self.paint_image_with_dither(
+            bounds,
+            image_bounds,
+            corner_radii,
+            data,
+            frame_index,
+            grayscale,
+            None,
+        )
+    }
+
+    /// Paint an image with optional GPU ordered dithering, preserving image loading and clipping.
+    pub fn paint_image_with_dither(
+        &mut self,
+        bounds: Bounds<Pixels>,
+        image_bounds: Bounds<Pixels>,
+        corner_radii: Corners<Pixels>,
+        data: Arc<RenderImage>,
+        frame_index: usize,
+        grayscale: bool,
+        dither: Option<crate::ImageDither>,
+    ) -> Result<()> {
         self.invalidator.debug_assert_paint();
 
         let visible_bounds = bounds.intersect(&image_bounds);
@@ -5174,6 +5197,9 @@ impl Window {
         let opacity = self.element_opacity();
 
         self.next_frame.scene.insert_primitive(PolychromeSprite {
+            dither: dither
+                .map(|config| config.shader_params(self.scale_factor()))
+                .unwrap_or([0.0; 4]),
             order: 0,
             pad: 0,
             grayscale: grayscale.into(),

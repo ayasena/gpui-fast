@@ -434,6 +434,7 @@ fn translation_moves_every_position_a_primitive_carries() {
     assert_eq!(moved.transformation, expected);
 
     let poly = PolychromeSprite {
+        dither: [0.0; 4],
         order: 0,
         pad: 0,
         grayscale: false.into(),

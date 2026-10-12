@@ -444,6 +444,7 @@ fn tile_sprite(
 ) -> PolychromeSprite {
     let bounds = layer.tile_bounds(tile);
     PolychromeSprite {
+        dither: [0.0; 4],
         order: 0,
         pad: 0,
         grayscale: false.into(),
@@ -664,6 +665,7 @@ fn add_content(
         transformation: TransformationMatrix::unit(),
     });
     scene.insert_primitive(PolychromeSprite {
+        dither: [0.0; 4],
         order: 0,
         pad: 0,
         grayscale: false.into(),

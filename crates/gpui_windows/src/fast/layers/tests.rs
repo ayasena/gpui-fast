@@ -233,6 +233,7 @@ fn composited_scene(
     for &tile in tiles {
         let bounds = layer.tile_bounds(tile);
         composited.insert_primitive(PolychromeSprite {
+            dither: [0.0; 4],
             order: 0,
             pad: 0,
             grayscale: false.into(),
@@ -408,6 +409,7 @@ fn rasterize_and_assemble(harness: &mut Harness, content: Scene, tiles: &[(i32, 
     for &tile in &coords {
         let bounds = layer.tile_bounds(tile);
         frame.insert_primitive(PolychromeSprite {
+            dither: [0.0; 4],
             order: 0,
             pad: 0,
             grayscale: false.into(),
@@ -587,6 +589,7 @@ fn add_content(
         transformation: TransformationMatrix::unit(),
     });
     scene.insert_primitive(PolychromeSprite {
+        dither: [0.0; 4],
         order: 0,
         pad: 0,
         grayscale: false.into(),

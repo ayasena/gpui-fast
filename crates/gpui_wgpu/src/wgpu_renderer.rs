@@ -2802,7 +2802,29 @@ mod tests {
         assert_eq!(std::mem::size_of::<Underline>(), 16 * 4);
         assert_eq!(std::mem::size_of::<MonochromeSprite>(), 28 * 4);
         assert_eq!(std::mem::size_of::<SubpixelSprite>(), 28 * 4);
-        assert_eq!(std::mem::size_of::<PolychromeSprite>(), 24 * 4);
+        assert_eq!(std::mem::size_of::<PolychromeSprite>(), 28 * 4);
+        assert_eq!(std::mem::offset_of!(PolychromeSprite, dither), 24 * 4);
+    }
+
+    #[test]
+    fn polychrome_dither_layout_matches_shader() {
+        let module = naga::front::wgsl::parse_str(STORAGE_BUFFER_SHADERS).unwrap();
+        let sprite = module
+            .types
+            .iter()
+            .find_map(|(_, ty)| (ty.name.as_deref() == Some("PolychromeSprite")).then_some(ty))
+            .unwrap();
+        let naga::TypeInner::Struct { members, span } = &sprite.inner else {
+            panic!("PolychromeSprite must be a shader struct");
+        };
+        assert_eq!(*span as usize, std::mem::size_of::<PolychromeSprite>());
+        let dither = members.last().unwrap();
+        assert_eq!(dither.name.as_deref(), Some("dither"));
+        assert_eq!(
+            dither.offset as usize,
+            std::mem::offset_of!(PolychromeSprite, dither)
+        );
+        assert!(WEBGL_SHADERS.contains("instance_cursor(instance_id * 28u)"));
     }
 
     #[test]

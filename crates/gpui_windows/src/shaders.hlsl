@@ -1219,6 +1219,8 @@ struct PolychromeSprite {
     Bounds content_mask;
     Corners corner_radii;
     AtlasTile tile;
+    // levels, strength, screen-space pixel size, padding; matches the Rust ABI.
+    float4 dither;
 };
 
 struct PolychromeSpriteVertexOutput {
@@ -1262,6 +1264,18 @@ float4 polychrome_sprite_fragment(PolychromeSpriteFragmentInput input): SV_Targe
     if (sprite.grayscale != 0u) {
         float3 grayscale = dot(color.rgb, GRAYSCALE_FACTORS);
         color = float4(grayscale, sample.a);
+    }
+    if (sprite.dither.x >= 2.0) {
+        static const float bayer[16] = {
+             0.0,  8.0,  2.0, 10.0,
+            12.0,  4.0, 14.0,  6.0,
+             3.0, 11.0,  1.0,  9.0,
+            15.0,  7.0, 13.0,  5.0
+        };
+        uint2 cell = uint2(floor(input.position.xy / max(sprite.dither.z, 1.0))) & 3u;
+        float threshold = ((bayer[cell.y * 4u + cell.x] + 0.5) / 16.0 - 0.5) * sprite.dither.y;
+        float steps = sprite.dither.x - 1.0;
+        color.rgb = saturate(floor(color.rgb * steps + 0.5 + threshold) / steps);
     }
     color.a *= sprite.opacity * saturate(0.5 - distance);
     return color;

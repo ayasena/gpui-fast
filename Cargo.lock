@@ -2941,8 +2941,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "gpui"
-version = "0.2.2"
+name = "gpui-fast"
+version = "0.1.7"
 dependencies = [
  "accesskit",
  "anyhow",
@@ -3021,6 +3021,103 @@ dependencies = [
 ]
 
 [[package]]
+name = "gpui-fast-apple"
+version = "0.1.7"
+dependencies = [
+ "anyhow",
+ "async-task",
+ "block2 0.6.2",
+ "cbindgen",
+ "collections",
+ "core-foundation 0.10.0",
+ "core-foundation-sys",
+ "core-graphics 0.24.0",
+ "core-text",
+ "derive_more 2.1.1",
+ "dispatch2",
+ "etagere",
+ "foreign-types",
+ "futures",
+ "gpui-fast",
+ "gpui_util",
+ "image",
+ "libc",
+ "log",
+ "mach2 0.6.0",
+ "metal",
+ "objc2 0.6.3",
+ "objc2-core-foundation",
+ "objc2-core-text",
+ "objc2-core-video",
+ "objc2-foundation 0.3.2",
+ "objc2-metal 0.3.2",
+ "objc2-quartz-core 0.3.2",
+ "objc2-security",
+ "parking_lot",
+ "pathfinder_geometry",
+ "smallvec",
+ "thiserror 2.0.17",
+ "zed-font-kit 0.14.1-zed (git+https://github.com/zed-industries/font-kit?rev=94b0f28166665e8fd2f53ff6d268a14955c82269)",
+]
+
+[[package]]
+name = "gpui-fast-wgpu"
+version = "0.1.7"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "collections",
+ "cosmic-text",
+ "criterion",
+ "etagere",
+ "gpui-fast",
+ "gpui_util",
+ "image",
+ "itertools 0.14.0",
+ "log",
+ "naga",
+ "parking_lot",
+ "profiling",
+ "raw-window-handle",
+ "smallvec",
+ "swash",
+ "unicode-bidi",
+ "unicode-segmentation",
+ "web-sys",
+ "wgpu",
+ "zed-font-kit 0.14.1-zed (git+https://github.com/zed-industries/font-kit?rev=94b0f28166665e8fd2f53ff6d268a14955c82269)",
+]
+
+[[package]]
+name = "gpui-fast-windows"
+version = "0.1.7"
+dependencies = [
+ "accesskit",
+ "accesskit_windows",
+ "anyhow",
+ "collections",
+ "dunce",
+ "etagere",
+ "futures",
+ "gpui-fast",
+ "gpui_util",
+ "image",
+ "itertools 0.14.0",
+ "log",
+ "parking_lot",
+ "rand 0.9.4",
+ "raw-window-handle",
+ "scheduler",
+ "smallvec",
+ "uuid",
+ "windows 0.62.2",
+ "windows-core 0.62.2",
+ "windows-numerics 0.3.1",
+ "windows-registry 0.6.1",
+ "zed-scap 0.0.8-zed (git+https://github.com/zed-industries/scap?rev=4afea48c3b002197176fb19cd0f9b180dd36eaac)",
+]
+
+[[package]]
 name = "gpui-pre"
 version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3094,7 +3191,7 @@ dependencies = [
 name = "gpui-pre"
 version = "0.3.9"
 dependencies = [
- "gpui",
+ "gpui-fast",
 ]
 
 [[package]]
@@ -3308,7 +3405,7 @@ dependencies = [
 name = "gpui-pre-platform"
 version = "0.3.9"
 dependencies = [
- "gpui",
+ "gpui-fast",
  "gpui_platform",
 ]
 
@@ -3521,46 +3618,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "829258540ea51bb9ea4a71686beffe5c99586901ba9f39944d06e4a180ab63fe"
 
 [[package]]
-name = "gpui_apple"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-task",
- "block2 0.6.2",
- "cbindgen",
- "collections",
- "core-foundation 0.10.0",
- "core-foundation-sys",
- "core-graphics 0.24.0",
- "core-text",
- "derive_more 2.1.1",
- "dispatch2",
- "etagere",
- "foreign-types",
- "futures",
- "gpui",
- "gpui_util",
- "image",
- "libc",
- "log",
- "mach2 0.6.0",
- "metal",
- "objc2 0.6.3",
- "objc2-core-foundation",
- "objc2-core-text",
- "objc2-core-video",
- "objc2-foundation 0.3.2",
- "objc2-metal 0.3.2",
- "objc2-quartz-core 0.3.2",
- "objc2-security",
- "parking_lot",
- "pathfinder_geometry",
- "smallvec",
- "thiserror 2.0.17",
- "zed-font-kit 0.14.1-zed (git+https://github.com/zed-industries/font-kit?rev=94b0f28166665e8fd2f53ff6d268a14955c82269)",
-]
-
-[[package]]
 name = "gpui_linux"
 version = "0.1.0"
 dependencies = [
@@ -3575,9 +3632,9 @@ dependencies = [
  "collections",
  "filedescriptor",
  "futures",
- "gpui",
+ "gpui-fast",
+ "gpui-fast-wgpu",
  "gpui_util",
- "gpui_wgpu",
  "http_client",
  "libc",
  "log",
@@ -3620,8 +3677,8 @@ dependencies = [
  "dispatch2",
  "foreign-types",
  "futures",
- "gpui",
- "gpui_apple",
+ "gpui-fast",
+ "gpui-fast-apple",
  "gpui_util",
  "image",
  "itertools 0.14.0",
@@ -3648,7 +3705,7 @@ dependencies = [
 name = "gpui_macros"
 version = "0.1.0"
 dependencies = [
- "gpui",
+ "gpui-fast",
  "heck 0.5.0",
  "proc-macro2",
  "quote",
@@ -3661,11 +3718,11 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "cocoa 0.26.0",
- "gpui",
+ "gpui-fast",
+ "gpui-fast-wgpu",
  "gpui-pre 0.3.7",
  "gpui-pre-platform 0.3.7",
  "gpui_platform",
- "gpui_wgpu",
  "gtk",
  "lb-wry",
  "libc",
@@ -3688,12 +3745,12 @@ dependencies = [
  "bench_metrics",
  "console_error_panic_hook",
  "criterion",
- "gpui",
+ "gpui-fast",
+ "gpui-fast-wgpu",
+ "gpui-fast-windows",
  "gpui_linux",
  "gpui_macos",
  "gpui_web",
- "gpui_wgpu",
- "gpui_windows",
 ]
 
 [[package]]
@@ -3722,8 +3779,8 @@ dependencies = [
  "async-channel 2.5.0",
  "console_error_panic_hook",
  "futures",
- "gpui",
- "gpui_wgpu",
+ "gpui-fast",
+ "gpui-fast-wgpu",
  "http_client",
  "js-sys",
  "log",
@@ -3740,63 +3797,6 @@ dependencies = [
  "wasm_thread 0.3.3 (git+https://github.com/zed-industries/wasm_thread?rev=0cf96c7708dfb97ccf3da50347e25edcf75d6937)",
  "web-sys",
  "web-time",
-]
-
-[[package]]
-name = "gpui_wgpu"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytemuck",
- "collections",
- "cosmic-text",
- "criterion",
- "etagere",
- "gpui",
- "gpui_util",
- "image",
- "itertools 0.14.0",
- "log",
- "naga",
- "parking_lot",
- "profiling",
- "raw-window-handle",
- "smallvec",
- "swash",
- "unicode-bidi",
- "unicode-segmentation",
- "web-sys",
- "wgpu",
- "zed-font-kit 0.14.1-zed (git+https://github.com/zed-industries/font-kit?rev=94b0f28166665e8fd2f53ff6d268a14955c82269)",
-]
-
-[[package]]
-name = "gpui_windows"
-version = "0.1.0"
-dependencies = [
- "accesskit",
- "accesskit_windows",
- "anyhow",
- "collections",
- "dunce",
- "etagere",
- "futures",
- "gpui",
- "gpui_util",
- "image",
- "itertools 0.14.0",
- "log",
- "parking_lot",
- "rand 0.9.4",
- "raw-window-handle",
- "scheduler",
- "smallvec",
- "uuid",
- "windows 0.62.2",
- "windows-core 0.62.2",
- "windows-numerics 0.3.1",
- "windows-registry 0.6.1",
- "zed-scap 0.0.8-zed (git+https://github.com/zed-industries/scap?rev=4afea48c3b002197176fb19cd0f9b180dd36eaac)",
 ]
 
 [[package]]

@@ -5,6 +5,7 @@ mod container_query;
 mod deferred;
 mod div;
 mod image_cache;
+mod image_dither;
 mod img;
 mod list;
 mod surface;

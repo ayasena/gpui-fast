@@ -207,6 +207,7 @@ fn paint(scene: &mut Scene, rng: &mut StdRng) -> Vec<Painted> {
                             transformation: TransformationMatrix::unit(),
                         }),
                         Kind::Polychrome => scene.insert_primitive(PolychromeSprite {
+                            dither: [0.0; 4],
                             order: 0,
                             pad: 0,
                             grayscale: false.into(),

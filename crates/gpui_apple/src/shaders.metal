@@ -727,6 +727,13 @@ fragment float4 polychrome_sprite_fragment(
     color.g = grayscale;
     color.b = grayscale;
   }
+  if (sprite.dither[0] >= 2.0) {
+    constexpr uint bayer[16] = {0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5};
+    uint2 cell = uint2(floor(input.position.xy / sprite.dither[2])) % 4;
+    float threshold = ((float(bayer[cell.y * 4 + cell.x]) + 0.5) / 16.0 - 0.5) * sprite.dither[1];
+    float steps = sprite.dither[0] - 1.0;
+    color.rgb = clamp(floor(color.rgb * steps + 0.5 + threshold) / steps, 0.0, 1.0);
+  }
   color.a *= sprite.opacity * saturate(0.5 - distance);
   return color;
 }

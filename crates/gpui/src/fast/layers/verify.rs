@@ -216,6 +216,7 @@ fn describe(primitive: &Primitive) -> String {
         Primitive::PolychromeSprite(p) => format!(
             "{:?}",
             PolychromeSprite {
+                dither: [0.0; 4],
                 order: 0,
                 tile: neutral(p.tile),
                 ..*p

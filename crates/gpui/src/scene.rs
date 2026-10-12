@@ -749,6 +749,7 @@ pub struct PolychromeSprite {
     pub content_mask: ContentMask<ScaledPixels>,
     pub corner_radii: Corners<ScaledPixels>,
     pub tile: AtlasTile,
+    pub dither: [f32; 4],
 }
 
 impl From<PolychromeSprite> for Primitive {

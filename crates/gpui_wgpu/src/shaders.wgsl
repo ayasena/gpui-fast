@@ -1268,8 +1268,22 @@ struct PolychromeSprite {
     content_mask: Bounds,
     corner_radii: Corners,
     tile: AtlasTile,
+    dither: vec4<f32>,
 }
 
+// Quantize straight RGB before blend_color applies the target alpha mode.
+fn ordered_image_dither(rgb: vec3<f32>, position: vec2<f32>, params: vec4<f32>) -> vec3<f32> {
+    let bayer = array<f32, 16>(
+        0.0, 8.0, 2.0, 10.0,
+        12.0, 4.0, 14.0, 6.0,
+        3.0, 11.0, 1.0, 9.0,
+        15.0, 7.0, 13.0, 5.0,
+    );
+    let cell = vec2<u32>(floor(position / max(params.z, 1.0))) % vec2<u32>(4u);
+    let threshold = (bayer[cell.y * 4u + cell.x] + 0.5) / 16.0;
+    let steps = params.x - 1.0;
+    return clamp(floor(rgb * steps + vec3<f32>(0.5 + (threshold - 0.5) * params.y)) / steps, vec3<f32>(0.0), vec3<f32>(1.0));
+}
 
 struct PolySpriteVarying {
     @builtin(position) position: vec4<f32>,
@@ -1306,6 +1320,9 @@ fn fs_poly_sprite(input: PolySpriteVarying) -> @location(0) vec4<f32> {
     if (sprite.grayscale != 0u) {
         let grayscale = dot(color.rgb, GRAYSCALE_FACTORS);
         color = vec4<f32>(vec3<f32>(grayscale), sample.a);
+    }
+    if (sprite.dither.x >= 2.0) {
+        color = vec4<f32>(ordered_image_dither(color.rgb, input.position.xy, sprite.dither), color.a);
     }
     return blend_color(color, sprite.opacity * saturate(0.5 - distance));
 }

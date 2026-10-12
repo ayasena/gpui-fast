@@ -1,6 +1,6 @@
 [package]
-name = "gpui"
-version = "0.2.2"
+name = "gpui-fast"
+version = "0.1.7"
 edition.workspace = true
 authors = ["Nathan Sobo <nathan@zed.dev>"]
 description = "Zed's GPU-accelerated UI framework"
@@ -50,6 +50,7 @@ profiler = ["dep:hdrhistogram"]
 stacker = ["dep:stacksafe"]
 
 [lib]
+name = "gpui"
 path = "src/gpui.rs"
 
 [dependencies]
