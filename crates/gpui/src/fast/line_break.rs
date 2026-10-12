@@ -2,7 +2,7 @@
 //!
 //! [`crate::LineWrapper`] may break before any character that is not a word
 //! character (CJK is not space separated), so a full-width comma or a closing
-//! bracket can open a line of its own: `营收走势` / `，顺便和微软`. CJK
+//! bracket can open a line of its own: `非常好` / `，我们一起`. CJK
 //! typesetting forbids that (W3C clreq / jlreq, UAX #14 classes CL, CP, EX,
 //! IS and NS), and equally forbids an opening bracket or quote ending a line.
 //! The wrapper asks [`allows_break_between`] before it takes a break in front
@@ -65,7 +65,7 @@ mod tests {
     };
     use std::sync::Arc;
 
-    const SENTENCE: &str = "帮我看一下苹果最近四个季度的营收走势，顺便和微软对比一下估值。";
+    const SENTENCE: &str = "今天的天气非常好，我们一起去公园散步吧。";
 
     fn wrapper() -> (LineWrapper, Arc<TextSystem>) {
         let cx = TestAppContext::build(TestDispatcher::new(0), None);
@@ -102,23 +102,23 @@ mod tests {
     #[test]
     fn a_comma_moves_down_with_the_character_before_it() {
         let (mut wrapper, text_system) = wrapper();
-        let fits = "帮我看一下苹果最近四个季度的营收走势";
+        let fits = "今天的天气非常好";
         let comma = width_of(&text_system, &wrapper, "，");
         assert!(comma > px(0.));
         // The line holds everything before the comma, but not the comma.
         let width = width_of(&text_system, &wrapper, fits) + comma / 2.;
 
         let boundaries = wrap(&mut wrapper, SENTENCE, width);
-        assert_eq!(boundaries[0], fits.len() - "势".len());
-        assert_eq!(&SENTENCE[boundaries[0]..], "势，顺便和微软对比一下估值。");
+        assert_eq!(boundaries[0], fits.len() - "好".len());
+        assert_eq!(&SENTENCE[boundaries[0]..], "好，我们一起去公园散步吧。");
     }
 
     #[test]
     fn no_width_starts_a_line_with_closing_or_ends_one_with_opening_punctuation() {
-        let text = "苹果（AAPL）发布了财报：营收同比增长８％，超出预期……「服务」业务表现亮眼——尤其是《年报》提到的部分。";
+        let text = "我用（Rust）重写了程序：速度提升了８％，超出预期……「渲染」部分表现亮眼——尤其是《文档》提到的部分。";
         let (mut wrapper, text_system) = wrapper();
         let one = width_of(&text_system, &wrapper, "中");
-        // From the narrowest line `（AAPL）` fits on, so no break is forced.
+        // From the narrowest line `（Rust）` fits on, so no break is forced.
         for columns in 6..text.chars().count() {
             let width = one * columns as f32 + one / 2.;
             for ix in wrap(&mut wrapper, text, width) {
@@ -136,10 +136,10 @@ mod tests {
 
     #[test]
     fn ideographs_and_latin_text_still_break_as_before() {
-        assert!(allows_break_between('势', '顺'));
-        assert!(allows_break_between('，', '顺'));
-        assert!(allows_break_between('势', '（'));
-        assert!(allows_break_between('）', '势'));
+        assert!(allows_break_between('好', '我'));
+        assert!(allows_break_between('，', '我'));
+        assert!(allows_break_between('用', '（'));
+        assert!(allows_break_between('）', '重'));
         assert!(!allows_break_between('—', '—'));
 
         let (mut wrapper, text_system) = wrapper();
